@@ -291,3 +291,54 @@ cert/
 #  **Ablaufdiagramm**
 
 ![[assets/Diagram.svg]]
+
+Hier ist das **API-Testprotokoll als vollständig formatiertes Markdown-Dokument**, bereit zum Kopieren oder als README-Anhang zu verwenden:
+
+---
+
+# 📋 API – Testprotokoll (M295 Zeiterfassung)
+
+**Test – Durchführung – Datum und Zeit:** 
+**Name:** 
+
+---
+
+## ✅ Übersicht der Testfälle
+
+| Nr. | **Kriterium** | **Endpoint**                        | **Methode** | **Beschreibung**                                  | **Test erfolgreich** | **Kommentar / Fehlerhinweis** |
+| --- | ------------- | ----------------------------------- | ----------- | ------------------------------------------------- | :------------------: | ----------------------------- |
+| 1   | User          | `/login`                            | POST        | Authentifiziert den Benutzer und erstellt ein JWT |         [✔/✘]        |                               |
+| 2   | User          | `/logout`                           | POST        | Beendet die Session / Token ungültig machen       |         [✔/✘]        |                               |
+| 3   | User          | `/users`                            | GET         | Liste aller Benutzer (nur Admin)                  |         [✔/✘]        |                               |
+| 4   | User          | `/users/:id`                        | GET         | Details eines bestimmten Benutzers                |         [✔/✘]        |                               |
+| 5   | Summen-View   | `/users/:id/saldo`                  | GET         | Zeigt Zeit- und Abwesenheitssaldo                 |         [✔/✘]        |                               |
+| 6   | Zeitstempel   | `/time-entries`                     | POST        | Neuen IN/OUT-Zeitstempel erstellen                |         [✔/✘]        |                               |
+| 7   | Zeitstempel   | `/time-entries/:id`                 | PUT         | Zeitstempel aktualisieren (nur Admin)             |         [✔/✘]        |                               |
+| 8   | Zeitstempel   | `/time-entries/:id`                 | DELETE      | Zeitstempel löschen (nur Admin)                   |         [✔/✘]        |                               |
+| 9   | Abwesenheiten | `/absences`                         | POST        | Abwesenheitsantrag erstellen                      |         [✔/✘]        |                               |
+| 10  | Abwesenheiten | `/absences`                         | GET         | Listet alle Abwesenheiten des Benutzers           |         [✔/✘]        |                               |
+| 11  | Abwesenheiten | `/absences/:id`                     | PUT         | Status aktualisieren (Genehmigen/Ablehnen)        |         [✔/✘]        |                               |
+| 12  | Dokumente     | `/absences/:id/documents`           | POST        | Datei(en) zu Abwesenheit hochladen                |         [✔/✘]        |                               |
+| 13  | Dokumente     | `/absences/:id/documents`           | GET         | Listet alle Dokumente der Abwesenheit             |         [✔/✘]        |                               |
+| 14  | Dokumente     | `/absences/:id/documents/:filename` | GET         | Download eines bestimmten Dokuments               |         [✔/✘]        |                               |
+| 15  | Dokumente     | `/absences/:id/documents/:filename` | DELETE      | Löscht ein bestimmtes Dokument (Admin)            |         [✔/✘]        |                               |
+| 16  | Protokoll     | `/logs`                             | GET         | Zeigt Änderungsprotokolle (nur Admin)             |         [✔/✘]        |                               |
+
+
+---
+
+## ✍️ Hinweise zur Durchführung
+
+* Tests werden mit **Postman** durchgeführt
+* Vor jedem Test **gültiges JWT** setzen:
+
+  ```
+  Authorization: Bearer <token>
+  ```
+* Für Datei-Uploads:
+
+  ```
+  Body → form-data → Key: "documents" → Type: File
+  ```
+
+---
