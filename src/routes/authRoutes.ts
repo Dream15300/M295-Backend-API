@@ -4,7 +4,7 @@ import { verifyToken } from '../middleware/verifyToken.js'
 
 const router = Router()
 
-// POST /api/auth/login
+// GET /api/auth/login
 router.get('/login', login)
 
 // GET /api/auth/me
