@@ -1,57 +1,89 @@
+# **M295 – Zeiterfassung Backend API**
 
----
+TypeScript · Express · SQLite · HTTPS · JWT · Multer · Rollenverwaltung · Dokument-Upload
 
-# **M295 – Backend API (Prüfungsprojekt)**
+Dies ist das vollständige Backendprojekt für die Modulprüfung **M295 (Backend-API)**.
+Es implementiert ein vollständiges Zeiterfassungssystem mit:
 
-TypeScript · Express · HTTPS · JWT · File-Upload
-
-Dieses Projekt ist das vollständige Backend für die Modulprüfung **M295 (Backend-API)**.
-Es umfasst Authentifizierung, Rollen-Berechtigungen, Datei-Uploads, vollständiges File-CRUD sowie grundlegende API-Struktur nach Best Practice.
-
----
-
-# 📌 **Inhalt**
-
-* Überblick & Features
-* Voraussetzungen
-* Installation & Start
+* Benutzerverwaltung
 * Authentifizierung (JWT)
-* Admin-Login
-* File-CRUD (Upload, Download, Liste, Update, Delete)
-* Testing mit Postman
-* Projektstruktur
-* Troubleshooting
+* Rollen & Berechtigungen
+* Zeitstempel (IN/OUT)
+* Abwesenheiten inkl. Genehmigungsprozess
+* Upload/Download/Löschen von Dokumenten pro Abwesenheit
+* Änderungsprotokoll (Logs)
+* HTTPS-Server
+* Datenbank via Migrations + Seeders
 
 ---
 
-# 🚀 **Überblick & Features**
+# 📌 **Hauptfeatures**
 
-* Node.js + **TypeScript** + **Express**
-* **HTTPS-Server** (lokal, selbstsignierte Zertifikate)
-* **JWT-Authentifizierung**
-* Rollen-Berechtigung (**Admin** benötigt für POST/PUT/DELETE)
-* **Datei-Upload** mit Multer (`uploads/images`)
-* Vollständiges File-CRUD:
+### 🔐 **Authentication & Authorization**
 
-  * `POST /api/files` – Upload
-  * `GET /api/files` – Liste aller Dateien
-  * `GET /api/files/:filename` – Download
-  * `PUT /api/files/:filename` – Datei ersetzen
-  * `DELETE /api/files/:filename` – Datei löschen
-* Saubere Layer-Architektur (Routing · Controller · Middleware)
+* Login erstellt ein JWT
+* Geschützte Routen via `verifyToken`
+* Rollen: `admin`, `employee`
+* `admin` kann:
+
+  * Benutzer listen
+  * Logs anzeigen
+  * Dokumente löschen
+  * Zeitstempel bearbeiten
+  * Abwesenheiten genehmigen/ablehnen
 
 ---
 
-# 📦 **Voraussetzungen**
+### 🕒 **Zeiterfassung**
 
-* Node.js **18+**
-* npm **9+**
-* Lokales Zertifikat unter:
+* Zeitstempel erstellen (IN/OUT)
+* Zeitstempel aktualisieren (nur admin)
+* Zeitstempel löschen (nur admin)
+
+---
+
+### 📅 **Abwesenheiten**
+
+* Abwesenheit erstellen
+* Aktuelle Benutzer-Abwesenheiten anzeigen
+* Abwesenheit genehmigen/ablehnen (admin)
+
+---
+
+### 📄 **Dokumenten-Upload**
+
+Pro Abwesenheit können mehrere Dokumente hochgeladen werden:
+
+* Upload (`POST /absences/:id/documents`)
+* Liste (`GET /absences/:id/documents`)
+* Download (`GET /absences/:id/documents/:filename`)
+* Delete (`DELETE /absences/:id/documents/:filename`)
+
+Speicherort:
 
 ```
-/cert/server.key
-/cert/server.crt
+/files/<absenceId>/<serverFileName>
 ```
+
+---
+
+### 📝 **Änderungsprotokoll (Logs)**
+
+* Jeder administrative Eingriff wird geloggt
+* Logs können via `/logs` eingesehen werden (nur admin)
+
+---
+
+# 📦 **Technologien**
+
+* Node.js 18+
+* TypeScript
+* Express
+* Multer (Dateiupload)
+* SQLite3
+* JWT
+* HTTPS Server
+* Winston Logger
 
 ---
 
@@ -63,207 +95,198 @@ npm install
 
 ---
 
-# ▶️ **Starten des Servers**
+# ▶️ **Server starten**
 
-### **Entwicklung (TypeScript direkt)**
+### Entwicklung:
 
 ```bash
 npm run dev
 ```
 
-### **Produktion (dist/)**
+### Produktion:
 
 ```bash
 npm start
 ```
 
-Server läuft danach unter:
+Server läuft unter:
 
 ```
 https://localhost:5001
 ```
 
----
+Zertifikate liegen in:
 
-# 🔐 **Authentifizierung (JWT)**
-
-## **Admin-Credentials**
-
-| E-Mail              | Passwort      | Rolle   |
-| ------------------- | ------------- | ------- |
-| `admin@example.com` | `hallo123456` | `admin` |
+```
+cert/server.key
+cert/server.crt
+```
 
 ---
 
-## 🔑 **Token erhalten**
+# 🗄 **Datenbank**
 
-**GET**
+Beim Serverstart werden automatisch:
+
+* **Migrations** ausgeführt → erzeugen Tabellen
+* **Seeders** ausgeführt → erzeugen Admin & Testdaten
+
+### 📁 Verzeichnisstruktur:
 
 ```
-https://localhost:5001/api/auth/login
-email = admin@example.com & password = hallo123456
+data/
+ ├─ migrations/
+ ├─ seeders/
+ └─ database.sqlite3
 ```
 
-### Beispiel-Response:
+---
+
+# 🔐 **Authentifizierung**
+
+### Login:
+
+```
+POST /login
+{
+  "username": "admin",
+  "password": "hallo123456"
+}
+```
+
+Antwort:
 
 ```json
 {
-  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "token": "<JWT>",
   "user": {
     "id": 1,
-    "email": "admin@example.com",
     "role": "admin"
   }
 }
 ```
 
----
-
-# 🔐 **JWT in geschützten Routen verwenden**
-
-Alle POST / PUT / DELETE für Dateien benötigen:
+### Logout:
 
 ```
-Authorization: Bearer <TOKEN>
+POST /logout
 ```
 
----
-
-# 🗂️ **File-CRUD (API-Dokumentation)**
-
-Dateien werden gespeichert unter:
+### Token senden:
 
 ```
-uploads/images/<filename>
-```
-
-### ✔ GET – **Alle Dateien**
-
-```
-GET /api/files
+Authorization: Bearer <JWT>
 ```
 
 ---
 
-### ✔ GET – **Eine Datei herunterladen**
+# 🧪 **API – Übersicht wichtiger Endpunkte**
+
+## 🔐 Auth
+
+| Methode | Endpoint  | Beschreibung    |
+| ------- | --------- | --------------- |
+| POST    | `/login`  | Token erzeugen  |
+| POST    | `/logout` | Session beenden |
+
+---
+
+## 👤 Benutzer
+
+| Methode | Endpoint           | Hinweise                            |
+| ------- | ------------------ | ----------------------------------- |
+| GET     | `/users`           | admin                               |
+| GET     | `/users/:id`       | eigenes Profil oder admin           |
+| GET     | `/users/:id/saldo` | berechneter Zeit-/Abwesenheitssaldo |
+
+---
+
+## 🕒 Zeitstempel (Time Entries)
+
+| Methode | Endpoint            | Beschreibung    |
+| ------- | ------------------- | --------------- |
+| POST    | `/time-entries`     | IN/OUT stempeln |
+| PUT     | `/time-entries/:id` | admin           |
+| DELETE  | `/time-entries/:id` | admin           |
+
+---
+
+## 📅 Abwesenheiten
+
+| Methode | Endpoint        | Beschreibung                |
+| ------- | --------------- | --------------------------- |
+| POST    | `/absences`     | Antrag erstellen            |
+| GET     | `/absences`     | Eigene Anträge              |
+| PUT     | `/absences/:id` | Genehmigen/ablehnen (admin) |
+
+---
+
+## 📄 Dokumente pro Abwesenheit
+
+| Methode | Endpoint                            | Beschreibung      |
+| ------- | ----------------------------------- | ----------------- |
+| POST    | `/absences/:id/documents`           | Dateien hochladen |
+| GET     | `/absences/:id/documents`           | Dokumentliste     |
+| GET     | `/absences/:id/documents/:filename` | Download          |
+| DELETE  | `/absences/:id/documents/:filename` | admin             |
+
+Dokumente werden wie folgt gespeichert:
 
 ```
-GET /api/files/:filename
-```
-
-Beispiel:
-
-```
-GET /api/files/background.jpg
-```
-
-Oder direkt aus dem Static-Host:
-
-```
-https://localhost:5001/uploads/images/background.jpg
+files/<absenceId>/<serverFilename>
 ```
 
 ---
 
-### ✔ POST – **Datei hochladen (nur Admin)**
+## 📜 Logs
 
-```
-POST /api/files
-```
-
-### **Postman-Body: form-data**
-
-| KEY  | TYPE | VALUE           |
-| ---- | ---- | --------------- |
-| file | File | Datei auswählen |
+| Methode | Endpoint | Hinweise   |
+| ------- | -------- | ---------- |
+| GET     | `/logs`  | admin-only |
 
 ---
 
-### ✔ PUT – **Datei ersetzen (nur Admin)**
+# 🔧 **Projektstruktur**
 
 ```
-PUT /api/files/:filename
-```
-
-Auch hier:
-
-| KEY  | TYPE | VALUE      |
-| ---- | ---- | ---------- |
-| file | File | Neue Datei |
-
----
-
-### ✔ DELETE – **Datei löschen (nur Admin)**
-
-```
-DELETE /api/files/:filename
-```
-
----
-
-# 🧪 **Testing via Postman**
-
-## 1. Token holen
-
-→ `GET /api/auth/login`
-
-## 2. Token in Postman setzen:
-
-**Authorization → Bearer Token**
-
-## 3. File-CRUD testen
-
-* `GET /api/files`
-* `POST /api/files` (form-data → file)
-* `GET /api/files/<name>`
-* `PUT /api/files/<name>` (form-data → file)
-* `DELETE /api/files/<name>`
-
-## Typische Fehlerquellen:
-
-* falscher Feldname (muss **file** heißen)
-* kein Admin-Token
-
----
-
-# 📁 **Projektstruktur**
-
-```
-└─ src/
-   ├─ app.ts               
-   ├─ server.ts            
-   ├─ logger.ts
-   ├─ routes/
-   ├─ controllers/
-   ├─ middleware/
-   ├─ lib/
-   ├─ repo/
-   ├─ types/
-   └─ config/
-uploads/
-└─ images/                 # Gespeicherte Dateien
-cert/
-└─ server.key / server.crt
-data/
-├─ migrations/
-└─ seeders/
+src/
+ ├─ app.ts
+ ├─ server.ts
+ ├─ logger.ts
+ ├─ config/
+ ├─ controllers/
+ ├─ middleware/
+ ├─ repo/
+ ├─ models/
+ ├─ types/
+ └─ routes/
+files/
+ └─ <absenceId>/
 logs/
-├─ combined.log
-└─ error.log
+ ├─ combined.log
+ └─ error.log
+data/
+ ├─ migrations/
+ ├─ seeders/
+ └─ database.sqlite3
+cert/
+ ├─ server.key
+ └─ server.crt
 ```
 
 ---
 
 # 🛠️ **Troubleshooting**
 
-| Problem                      | Ursache               | Lösung                                               |
-| ---------------------------- | --------------------- | ---------------------------------------------------- |
-| Datei wird nicht hochgeladen | Form-Key nicht `file` | In Postman ändern                                    |
-| 401 Unauthorized             | kein Token            | Bearer Token setzen                                  |
-| 403 Forbidden                | Rolle ≠ admin         | [admin@example.com](mailto:admin@example.com) nutzen |
-| Änderungen wirken nicht      | alter Build läuft     | `npm start`                         |
+| Problem              | Ursache                  | Lösung                           |
+| -------------------- | ------------------------ | -------------------------------- |
+| 401 Unauthorized     | Kein Token gesendet      | Header setzen                    |
+| 403 Forbidden        | Keine Admin-Rolle        | admin nutzen                     |
+| Upload schlägt fehl  | falsches Multipart-Feld  | Feldname: `documents`            |
+| Datei nicht gefunden | falscher filename        | filename aus GET-Liste verwenden |
+| Seeders doppelt      | DB löschen → neu starten | `database.sqlite3` löschen       |
 
----
+
 
 #  **Ablaufdiagramm**
 

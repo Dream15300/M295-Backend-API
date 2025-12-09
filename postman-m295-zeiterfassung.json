@@ -1,0 +1,346 @@
+{
+  "info": {
+    "name": "M295 Zeiterfassung API",
+    "_postman_id": "11111111-2222-3333-4444-555555555555",
+    "description": "LB2 M295 - Zeiterfassung Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://localhost:5001"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"admin\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/logout",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "GET /users (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "users"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Time Entries",
+      "item": [
+        {
+          "name": "POST /time-entries (ohne Login)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": 1,\n  \"type\": \"IN\",\n  \"comment\": \"Arbeitsbeginn\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/time-entries",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "time-entries"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "PUT /time-entries/:id (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"timestamp\": \"2025-01-10T08:05:00.000Z\",\n  \"type\": \"IN\",\n  \"comment\": \"Korrigierter Arbeitsbeginn\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/time-entries/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "time-entries",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /time-entries/:id (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/time-entries/1",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "time-entries",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Absences",
+      "item": [
+        {
+          "name": "GET /absences",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/absences",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absences"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Documents",
+      "item": [
+        {
+          "name": "POST /absences/:id/documents (Upload, admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "files",
+                  "type": "file",
+                  "src": ""
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{baseUrl}}/absences/1/documents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absences",
+                "1",
+                "documents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /absences/:id/documents (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absences/1/documents",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absences",
+                "1",
+                "documents"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GET /absences/:id/documents/:docId (Download, admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absences/1/documents/{{docId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absences",
+                "1",
+                "documents",
+                "{{docId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DELETE /absences/:id/documents/:docId (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/absences/1/documents/{{docId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "absences",
+                "1",
+                "documents",
+                "{{docId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Logs",
+      "item": [
+        {
+          "name": "GET /logs (admin)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/logs",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "logs"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
