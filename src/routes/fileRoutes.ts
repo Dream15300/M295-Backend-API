@@ -12,10 +12,8 @@ import {
 
 const router = Router()
 
-// GET /api/files  → Liste aller Dateien
 router.get('/', listFiles)
 
-// POST /api/files  (Upload nur für Admin)
 router.post(
   '/',
   verifyToken,
@@ -25,10 +23,8 @@ router.post(
   uploadFile,
 )
 
-// GET /api/files/:filename  (Download)
 router.get('/:filename', downloadFile)
 
-// PUT /api/files/:filename  (Datei ersetzen, nur Admin)
 router.put(
   '/:filename',
   verifyToken,
@@ -38,8 +34,6 @@ router.put(
   updateFile,
 )
 
-
-// DELETE /api/files/:filename  (Löschen nur für Admin)
 router.delete(
   '/:filename',
   verifyToken,

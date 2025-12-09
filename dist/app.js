@@ -32,8 +32,6 @@ app.use(express.json());
 app.get('/', (req, res) => {
     res.status(200).send('OK');
 });
-// Statische Files (z.B. für Uploads, falls nötig)
-app.use('/uploads', express.static('uploads'));
 // Haupt-Router (LB-konforme Pfade: /login, /users, /time-entries, ...)
 app.use('/', apiRouter);
 // 404-Handler

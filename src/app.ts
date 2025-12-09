@@ -43,9 +43,6 @@ app.get('/', (req: Request, res: Response) => {
   res.status(200).send('OK')
 })
 
-// Statische Files (z.B. für Uploads, falls nötig)
-app.use('/uploads', express.static('uploads'))
-
 // Haupt-Router (LB-konforme Pfade: /login, /users, /time-entries, ...)
 app.use('/', apiRouter)
 
