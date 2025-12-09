@@ -1,10 +1,10 @@
-import { Router } from 'express';
-import { login } from '../controllers/authController.js';
-import { verifyToken } from '../middleware/verifyToken.js';
+import { Router } from "express";
+import { login, logout } from "../controllers/authController.js";
+import { verifyToken } from "../middleware/verifyToken.js";
 const router = Router();
-// GET /api/auth/login
-router.get('/login', login);
-// GET /api/auth/me
-router.get('/me', verifyToken);
+// POST /login
+router.post("/login", login);
+// Optional: geschützter Logout (Token wird geprüft)
+router.post("/logout", verifyToken, logout);
 export default router;
 //# sourceMappingURL=authRoutes.js.map

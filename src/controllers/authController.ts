@@ -1,51 +1,57 @@
-import type { Request, Response, NextFunction } from 'express'
-import jwt from 'jsonwebtoken'
-import bcrypt from 'bcryptjs'
-import { JWT_EXPIRES_IN, JWT_SECRET } from '../config/authConfig.js'
-import { findByEmail } from '../repo/userRepo.js'
+import type { Request, Response, NextFunction } from "express";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { JWT_EXPIRES_IN, JWT_SECRET } from "../config/authConfig.js";
+import { findByUsername } from "../repo/userRepo.js";
+import type { AuthenticatedRequest } from "../types/auth.js";
 
 export async function login(req: Request, res: Response, next: NextFunction) {
   try {
-    const email =
-      (req.body?.email as string | undefined) ??
-      (req.query.email as string | undefined)
+    const username = req.body?.username as string | undefined;
+    const password = req.body?.password as string | undefined;
 
-    const password =
-      (req.body?.password as string | undefined) ??
-      (req.query.password as string | undefined)
-
-    if (!email || !password) {
+    if (!username || !password) {
       return res
         .status(400)
-        .json({ fehler: 'email und password sind erforderlich' })
+        .json({ fehler: "username und password sind erforderlich" });
     }
 
-    // 1. User aus DB laden
-    const user = await findByEmail(email)
+    const user = await findByUsername(username);
 
     if (!user) {
-      return res.status(401).json({ fehler: 'Ungültige Anmeldedaten' })
+      return res.status(401).json({ fehler: "Ungültige Anmeldedaten" });
     }
 
-    // 2. Passwort prüfen (Hash vergleichen)
-    const valid = await bcrypt.compare(password, user.password_hash)
+    const valid = await bcrypt.compare(password, user.password_hash);
     if (!valid) {
-      return res.status(401).json({ fehler: 'Ungültige Anmeldedaten' })
+      return res.status(401).json({ fehler: "Ungültige Anmeldedaten" });
     }
 
-    // 3. JWT erzeugen
     const payload = {
       id: user.id,
-      email: user.email,
+      username: user.username,
       role: user.role,
-    }
+    };
 
     const token = jwt.sign(payload, JWT_SECRET, {
       expiresIn: JWT_EXPIRES_IN,
-    })
+    });
 
-    return res.status(200).json({ token, user: payload })
+    return res.status(200).json({ token, user: payload });
   } catch (err) {
-    next(err)
+    next(err);
   }
+}
+
+/**
+ * POST /logout
+ * Bei JWT gibt es serverseitig nichts zu "zerstören".
+ * Wir bestätigen nur, dass der Client sein Token verwerfen soll.
+ */
+export async function logout(
+  _req: AuthenticatedRequest,
+  res: Response,
+  _next: NextFunction,
+) {
+  return res.status(200).json({ nachricht: "Logout erfolgreich. Token clientseitig löschen." });
 }
