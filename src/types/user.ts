@@ -1,14 +1,15 @@
+export type UserRole = 'employee' | 'admin';
+
 export interface User {
   id: number;
-  email: string;
   username: string;
   password_hash: string;
-  role: string; // 'employee' | 'manager' o.ä.
+  role: UserRole;
+  created_at: string;
 }
 
 export interface UserPublic {
   id: number;
-  email: string;
   username: string;
-  role: string;
+  role: UserRole;
 }
