@@ -95,7 +95,7 @@ export async function ensureDatabase(dbRel = DB_RELATIVE, _initSqlRel = INIT_SQL
         });
     });
 }
-// Optional: DB oeffnen (mit PRAGMA), wenn Sie eine Connection brauchen
+// Optional: DB oeffnen (mit PRAGMA), wenn eine Connection benötigt wird
 export async function openDb(dbRel = DB_RELATIVE) {
     const dbFile = absFromProject(dbRel);
     return await new Promise((done, fail) => {

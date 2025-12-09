@@ -1,1 +1,1 @@
-{"version":3,"file":"authConfig.js","sourceRoot":"","sources":["../../src/config/authConfig.ts"],"names":[],"mappings":"AACA,MAAM,CAAC,MAAM,UAAU,GAAG,OAAO,CAAC,GAAG,CAAC,UAAU,IAAI,yBAAyB,CAAA;AAE7E,uBAAuB;AACvB,MAAM,CAAC,MAAM,cAAc,GAAG,IAAI,CAAA"}
+{"version":3,"file":"authConfig.js","sourceRoot":"","sources":["../../src/config/authConfig.ts"],"names":[],"mappings":"AACA,MAAM,CAAC,MAAM,UAAU,GAAG,OAAO,CAAC,GAAG,CAAC,UAAU,IAAI,yBAAyB,CAAA;AAE7E,kBAAkB;AAClB,MAAM,CAAC,MAAM,cAAc,GAAG,IAAI,CAAA"}
