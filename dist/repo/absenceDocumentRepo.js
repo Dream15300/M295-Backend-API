@@ -1,12 +1,13 @@
-// -----------------------------------------------------------------------------
-// CRUD für absence_documents – für Uploads zu Abwesenheiten.
-// -----------------------------------------------------------------------------
-import { openDb } from "../lib/ensureDatabase.js";
+import { openDb } from '../lib/ensureDatabase.js';
 export async function listByAbsence(absenceId) {
     const db = await openDb();
     try {
         return await new Promise((resolve, reject) => {
-            db.all("SELECT id, absence_id, filename, original_name, mime_type, size, uploaded_by, uploaded_at FROM absence_documents WHERE absence_id = ? ORDER BY uploaded_at DESC", [absenceId], (err, rows) => (err ? reject(err) : resolve(rows)));
+            db.all(`SELECT id, absence_id, filename, original_name, mime_type, size,
+                uploaded_by, uploaded_at
+         FROM absence_documents
+         WHERE absence_id = ?
+         ORDER BY uploaded_at DESC`, [absenceId], (err, rows) => (err ? reject(err) : resolve(rows)));
         });
     }
     finally {
@@ -17,7 +18,24 @@ export async function findById(id) {
     const db = await openDb();
     try {
         return await new Promise((resolve, reject) => {
-            db.get("SELECT id, absence_id, filename, original_name, mime_type, size, uploaded_by, uploaded_at FROM absence_documents WHERE id = ?", [id], (err, row) => err ? reject(err) : resolve(row));
+            db.get(`SELECT id, absence_id, filename, original_name, mime_type, size,
+                uploaded_by, uploaded_at
+         FROM absence_documents
+         WHERE id = ?`, [id], (err, row) => (err ? reject(err) : resolve(row)));
+        });
+    }
+    finally {
+        db.close();
+    }
+}
+export async function findByAbsenceAndFilename(absenceId, filename) {
+    const db = await openDb();
+    try {
+        return await new Promise((resolve, reject) => {
+            db.get(`SELECT id, absence_id, filename, original_name, mime_type, size,
+                uploaded_by, uploaded_at
+         FROM absence_documents
+         WHERE absence_id = ? AND filename = ?`, [absenceId, filename], (err, row) => (err ? reject(err) : resolve(row)));
         });
     }
     finally {
@@ -28,7 +46,9 @@ export async function create(input) {
     const db = await openDb();
     try {
         return await new Promise((resolve, reject) => {
-            db.run("INSERT INTO absence_documents (absence_id, filename, original_name, mime_type, size, uploaded_by) VALUES (?, ?, ?, ?, ?, ?)", [
+            db.run(`INSERT INTO absence_documents
+           (absence_id, filename, original_name, mime_type, size, uploaded_by)
+         VALUES (?, ?, ?, ?, ?, ?)`, [
                 input.absence_id,
                 input.filename,
                 input.original_name,
@@ -38,7 +58,10 @@ export async function create(input) {
             ], function (err) {
                 if (err)
                     return reject(err);
-                db.get("SELECT id, absence_id, filename, original_name, mime_type, size, uploaded_by, uploaded_at FROM absence_documents WHERE id = ?", [this.lastID], (getErr, row) => getErr ? reject(getErr) : resolve(row));
+                db.get(`SELECT id, absence_id, filename, original_name, mime_type, size,
+                    uploaded_by, uploaded_at
+             FROM absence_documents
+             WHERE id = ?`, [this.lastID], (getErr, row) => getErr ? reject(getErr) : resolve(row));
             });
         });
     }
@@ -61,7 +84,10 @@ export async function update(id, changes) {
     const db = await openDb();
     try {
         return await new Promise((resolve, reject) => {
-            db.run("UPDATE absence_documents SET absence_id = ?, filename = ?, original_name = ?, mime_type = ?, size = ?, uploaded_by = ? WHERE id = ?", [
+            db.run(`UPDATE absence_documents
+         SET absence_id = ?, filename = ?, original_name = ?, mime_type = ?,
+             size = ?, uploaded_by = ?
+         WHERE id = ?`, [
                 updated.absence_id,
                 updated.filename,
                 updated.original_name,
@@ -74,7 +100,10 @@ export async function update(id, changes) {
                     return reject(err);
                 if (this.changes === 0)
                     return resolve(undefined);
-                db.get("SELECT id, absence_id, filename, original_name, mime_type, size, uploaded_by, uploaded_at FROM absence_documents WHERE id = ?", [id], (getErr, row) => getErr ? reject(getErr) : resolve(row));
+                db.get(`SELECT id, absence_id, filename, original_name, mime_type, size,
+                    uploaded_by, uploaded_at
+             FROM absence_documents
+             WHERE id = ?`, [id], (getErr, row) => getErr ? reject(getErr) : resolve(row));
             });
         });
     }
@@ -82,11 +111,12 @@ export async function update(id, changes) {
         db.close();
     }
 }
-export async function remove(id) {
+export async function removeByAbsenceAndFilename(absenceId, filename) {
     const db = await openDb();
     try {
         return await new Promise((resolve, reject) => {
-            db.run("DELETE FROM absence_documents WHERE id = ?", [id], function (err) {
+            db.run(`DELETE FROM absence_documents
+         WHERE absence_id = ? AND filename = ?`, [absenceId, filename], function (err) {
                 if (err)
                     return reject(err);
                 resolve(this.changes > 0);
