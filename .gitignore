@@ -1,0 +1,4 @@
+node_modules
+
+# Obsidian Ordner ignorieren
+.obsidian/

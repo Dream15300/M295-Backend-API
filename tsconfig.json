@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "rootDir": "src",
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "types": ["node", "jest", "supertest"],
+    "lib": ["ESNext"],
+     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "@src/*": ["src/*"]
+    },
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "typeRoots": ["./src/types", "./node_modules/@types"]
+  },
+  "include": ["src"],
+  "exclude": ["tests"]
+}
