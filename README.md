@@ -267,5 +267,4 @@ logs/
 
 #  **Ablaufdiagramm**
 
-![alt Image](Ablaufdiagramm.jpg)
-
+![[assets/Diagram.svg]]

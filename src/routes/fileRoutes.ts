@@ -1,4 +1,3 @@
-// src/routes/fileRoutes.ts
 import { Router } from 'express'
 import { verifyToken } from '../middleware/verifyToken.js'
 import { requireRole } from '../middleware/requireRole.js'

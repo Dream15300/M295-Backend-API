@@ -1,4 +1,3 @@
-// src/controllers/fileController.ts
 import type { Request, Response, NextFunction } from 'express'
 import path from 'node:path'
 import fs from 'node:fs'

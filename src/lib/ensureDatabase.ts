@@ -117,7 +117,7 @@ export async function ensureDatabase(
   });
 }
 
-// Optional: DB oeffnen (mit PRAGMA), wenn Sie eine Connection brauchen
+// Optional: DB oeffnen (mit PRAGMA), wenn eine Connection benötigt wird
 export async function openDb(
   dbRel: string = DB_RELATIVE,
 ): Promise<sqlite3.Database> {
