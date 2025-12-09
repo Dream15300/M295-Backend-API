@@ -264,3 +264,8 @@ logs/
 | Änderungen wirken nicht      | alter Build läuft     | `npm start`                         |
 
 ---
+
+#  **Ablaufdiagramm**
+
+![alt Image](Ablaufdiagramm.jpg)
+
