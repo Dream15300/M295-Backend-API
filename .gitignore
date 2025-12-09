@@ -1,4 +1,8 @@
 node_modules
 
+# Logs
+logs
+*.log
+
 # Obsidian Ordner ignorieren
 .obsidian/
