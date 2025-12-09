@@ -27,6 +27,7 @@
   "homepage": "https://github.com/it-m-h/M295_SG_2025#readme",
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/bcrypt": "^6.0.0",
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
@@ -68,6 +69,7 @@
     "@babel/preset-typescript": "^7.28.5",
     "@prisma/client": "^7.0.1",
     "argon2": "^0.44.0",
+    "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
