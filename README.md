@@ -1,6 +1,6 @@
 # **M295 – Zeiterfassung Backend API**
 
-Diese Arbeit wurde im Rahmen des Moduls M295 "Backend für Applikationen realisieren" gemacht. ALs ich diesen Kurs gemacht hatte, gab es leider keine Beispiele, die einem eine Vorstellung der Prüfung geben. Daher habe ich beschlossen, mein Projekt zu veröffentlichen für mehr Transparenz für zukünftige Lehrlinge. Beiliegend noch meine Bewertung.
+Diese Arbeit wurde im Rahmen des Moduls M295 "Backend für Applikationen realisieren" gemacht. Als ich diesen Kurs gemacht hatte, gab es leider keine Beispiele, die einem eine Vorstellung der Prüfung gaben. Daher habe ich beschlossen, mein Projekt zu veröffentlichen für mehr Transparenz für zukünftige Lehrlinge. Beiliegend noch meine Bewertung.
 
 1. npm install (Warnungen ignorieren. Vieles wird bei euch bereits veraltete Versionen sein, läuft trotzdem)
 2. npm run dev (startet das backend auf einem Localhost)
