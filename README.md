@@ -1,19 +1,30 @@
 # **M295 – Zeiterfassung Backend API**
 
+Diese Arbeit wurde im Rahmen des Moduls M295 "Backend für Applikationen realisieren" gemacht. ALs ich diesen Kurs gemacht hatte, gab es leider keine Beispiele, die einem eine Vorstellung der Prüfung geben. Daher habe ich beschlossen, mein Projekt zu veröffentlichen für mehr Transparenz für zukünftige Lehrlinge. Beiliegend noch meine Bewertung.
+
+1. npm install (Warnungen ignorieren. Vieles wird bei euch bereits veraltete Versionen sein, läuft trotzdem)
+2. npm run dev (startet das backend auf einem Localhost)
+
+![alt text](image.png)
+
+![alt text](image-1.png)
+
+# **M295 – Zeiterfassung Backend API**
+
 TypeScript · Express · SQLite · HTTPS · JWT · Multer · Rollenverwaltung · Dokument-Upload
 
 Dies ist das vollständige Backendprojekt für die Modulprüfung **M295 (Backend-API)**.
 Es implementiert ein vollständiges Zeiterfassungssystem mit:
 
-* Benutzerverwaltung
-* Authentifizierung (JWT)
-* Rollen & Berechtigungen
-* Zeitstempel (IN/OUT)
-* Abwesenheiten inkl. Genehmigungsprozess
-* Upload/Download/Löschen von Dokumenten pro Abwesenheit
-* Änderungsprotokoll (Logs)
-* HTTPS-Server
-* Datenbank via Migrations + Seeders
+- Benutzerverwaltung
+- Authentifizierung (JWT)
+- Rollen & Berechtigungen
+- Zeitstempel (IN/OUT)
+- Abwesenheiten inkl. Genehmigungsprozess
+- Upload/Download/Löschen von Dokumenten pro Abwesenheit
+- Änderungsprotokoll (Logs)
+- HTTPS-Server
+- Datenbank via Migrations + Seeders
 
 ---
 
@@ -21,32 +32,31 @@ Es implementiert ein vollständiges Zeiterfassungssystem mit:
 
 ### 🔐 **Authentication & Authorization**
 
-* Login erstellt ein JWT
-* Geschützte Routen via `verifyToken`
-* Rollen: `admin`, `employee`
-* `admin` kann:
-
-  * Benutzer listen
-  * Logs anzeigen
-  * Dokumente löschen
-  * Zeitstempel bearbeiten
-  * Abwesenheiten genehmigen/ablehnen
+- Login erstellt ein JWT
+- Geschützte Routen via `verifyToken`
+- Rollen: `admin`, `employee`
+- `admin` kann:
+  - Benutzer listen
+  - Logs anzeigen
+  - Dokumente löschen
+  - Zeitstempel bearbeiten
+  - Abwesenheiten genehmigen/ablehnen
 
 ---
 
 ### 🕒 **Zeiterfassung**
 
-* Zeitstempel erstellen (IN/OUT)
-* Zeitstempel aktualisieren (nur admin)
-* Zeitstempel löschen (nur admin)
+- Zeitstempel erstellen (IN/OUT)
+- Zeitstempel aktualisieren (nur admin)
+- Zeitstempel löschen (nur admin)
 
 ---
 
 ### 📅 **Abwesenheiten**
 
-* Abwesenheit erstellen
-* Aktuelle Benutzer-Abwesenheiten anzeigen
-* Abwesenheit genehmigen/ablehnen (admin)
+- Abwesenheit erstellen
+- Aktuelle Benutzer-Abwesenheiten anzeigen
+- Abwesenheit genehmigen/ablehnen (admin)
 
 ---
 
@@ -54,10 +64,10 @@ Es implementiert ein vollständiges Zeiterfassungssystem mit:
 
 Pro Abwesenheit können mehrere Dokumente hochgeladen werden:
 
-* Upload (`POST /absences/:id/documents`)
-* Liste (`GET /absences/:id/documents`)
-* Download (`GET /absences/:id/documents/:filename`)
-* Delete (`DELETE /absences/:id/documents/:filename`)
+- Upload (`POST /absences/:id/documents`)
+- Liste (`GET /absences/:id/documents`)
+- Download (`GET /absences/:id/documents/:filename`)
+- Delete (`DELETE /absences/:id/documents/:filename`)
 
 Speicherort:
 
@@ -69,21 +79,21 @@ Speicherort:
 
 ### 📝 **Änderungsprotokoll (Logs)**
 
-* Jeder administrative Eingriff wird geloggt
-* Logs können via `/logs` eingesehen werden (nur admin)
+- Jeder administrative Eingriff wird geloggt
+- Logs können via `/logs` eingesehen werden (nur admin)
 
 ---
 
 # 📦 **Technologien**
 
-* Node.js 18+
-* TypeScript
-* Express
-* Multer (Dateiupload)
-* SQLite3
-* JWT
-* HTTPS Server
-* Winston Logger
+- Node.js 18+
+- TypeScript
+- Express
+- Multer (Dateiupload)
+- SQLite3
+- JWT
+- HTTPS Server
+- Winston Logger
 
 ---
 
@@ -128,8 +138,8 @@ cert/server.crt
 
 Beim Serverstart werden automatisch:
 
-* **Migrations** ausgeführt → erzeugen Tabellen
-* **Seeders** ausgeführt → erzeugen Admin & Testdaten
+- **Migrations** ausgeführt → erzeugen Tabellen
+- **Seeders** ausgeführt → erzeugen Admin & Testdaten
 
 ### 📁 Verzeichnisstruktur:
 
@@ -286,9 +296,7 @@ cert/
 | Datei nicht gefunden | falscher filename        | filename aus GET-Liste verwenden |
 | Seeders doppelt      | DB löschen → neu starten | `database.sqlite3` löschen       |
 
-
-
-#  **Ablaufdiagramm**
+# **Ablaufdiagramm**
 
 ![[assets/Diagram.svg]]
 
@@ -298,8 +306,8 @@ Hier ist das **API-Testprotokoll als vollständig formatiertes Markdown-Dokument
 
 # 📋 API – Testprotokoll (M295 Zeiterfassung)
 
-**Test – Durchführung – Datum und Zeit:** 
-**Name:** 
+**Test – Durchführung – Datum und Zeit:**
+**Name:**
 
 ---
 
@@ -307,35 +315,35 @@ Hier ist das **API-Testprotokoll als vollständig formatiertes Markdown-Dokument
 
 | Nr. | **Kriterium** | **Endpoint**                        | **Methode** | **Beschreibung**                                  | **Test erfolgreich** | **Kommentar / Fehlerhinweis** |
 | --- | ------------- | ----------------------------------- | ----------- | ------------------------------------------------- | :------------------: | ----------------------------- |
-| 1   | User          | `/login`                            | POST        | Authentifiziert den Benutzer und erstellt ein JWT |         [✔/✘]        |                               |
-| 2   | User          | `/logout`                           | POST        | Beendet die Session / Token ungültig machen       |         [✔/✘]        |                               |
-| 3   | User          | `/users`                            | GET         | Liste aller Benutzer (nur Admin)                  |         [✔/✘]        |                               |
-| 4   | User          | `/users/:id`                        | GET         | Details eines bestimmten Benutzers                |         [✔/✘]        |                               |
-| 5   | Summen-View   | `/users/:id/saldo`                  | GET         | Zeigt Zeit- und Abwesenheitssaldo                 |         [✔/✘]        |                               |
-| 6   | Zeitstempel   | `/time-entries`                     | POST        | Neuen IN/OUT-Zeitstempel erstellen                |         [✔/✘]        |                               |
-| 7   | Zeitstempel   | `/time-entries/:id`                 | PUT         | Zeitstempel aktualisieren (nur Admin)             |         [✔/✘]        |                               |
-| 8   | Zeitstempel   | `/time-entries/:id`                 | DELETE      | Zeitstempel löschen (nur Admin)                   |         [✔/✘]        |                               |
-| 9   | Abwesenheiten | `/absences`                         | POST        | Abwesenheitsantrag erstellen                      |         [✔/✘]        |                               |
-| 10  | Abwesenheiten | `/absences`                         | GET         | Listet alle Abwesenheiten des Benutzers           |         [✔/✘]        |                               |
-| 11  | Abwesenheiten | `/absences/:id`                     | PUT         | Status aktualisieren (Genehmigen/Ablehnen)        |         [✔/✘]        |                               |
-| 12  | Dokumente     | `/absences/:id/documents`           | POST        | Datei(en) zu Abwesenheit hochladen                |         [✔/✘]        |                               |
-| 13  | Dokumente     | `/absences/:id/documents`           | GET         | Listet alle Dokumente der Abwesenheit             |         [✔/✘]        |                               |
-| 14  | Dokumente     | `/absences/:id/documents/:filename` | GET         | Download eines bestimmten Dokuments               |         [✔/✘]        |                               |
-| 15  | Dokumente     | `/absences/:id/documents/:filename` | DELETE      | Löscht ein bestimmtes Dokument (Admin)            |         [✔/✘]        |                               |
-| 16  | Protokoll     | `/logs`                             | GET         | Zeigt Änderungsprotokolle (nur Admin)             |         [✔/✘]        |                               |
-
+| 1   | User          | `/login`                            | POST        | Authentifiziert den Benutzer und erstellt ein JWT |        [✔/✘]         |                               |
+| 2   | User          | `/logout`                           | POST        | Beendet die Session / Token ungültig machen       |        [✔/✘]         |                               |
+| 3   | User          | `/users`                            | GET         | Liste aller Benutzer (nur Admin)                  |        [✔/✘]         |                               |
+| 4   | User          | `/users/:id`                        | GET         | Details eines bestimmten Benutzers                |        [✔/✘]         |                               |
+| 5   | Summen-View   | `/users/:id/saldo`                  | GET         | Zeigt Zeit- und Abwesenheitssaldo                 |        [✔/✘]         |                               |
+| 6   | Zeitstempel   | `/time-entries`                     | POST        | Neuen IN/OUT-Zeitstempel erstellen                |        [✔/✘]         |                               |
+| 7   | Zeitstempel   | `/time-entries/:id`                 | PUT         | Zeitstempel aktualisieren (nur Admin)             |        [✔/✘]         |                               |
+| 8   | Zeitstempel   | `/time-entries/:id`                 | DELETE      | Zeitstempel löschen (nur Admin)                   |        [✔/✘]         |                               |
+| 9   | Abwesenheiten | `/absences`                         | POST        | Abwesenheitsantrag erstellen                      |        [✔/✘]         |                               |
+| 10  | Abwesenheiten | `/absences`                         | GET         | Listet alle Abwesenheiten des Benutzers           |        [✔/✘]         |                               |
+| 11  | Abwesenheiten | `/absences/:id`                     | PUT         | Status aktualisieren (Genehmigen/Ablehnen)        |        [✔/✘]         |                               |
+| 12  | Dokumente     | `/absences/:id/documents`           | POST        | Datei(en) zu Abwesenheit hochladen                |        [✔/✘]         |                               |
+| 13  | Dokumente     | `/absences/:id/documents`           | GET         | Listet alle Dokumente der Abwesenheit             |        [✔/✘]         |                               |
+| 14  | Dokumente     | `/absences/:id/documents/:filename` | GET         | Download eines bestimmten Dokuments               |        [✔/✘]         |                               |
+| 15  | Dokumente     | `/absences/:id/documents/:filename` | DELETE      | Löscht ein bestimmtes Dokument (Admin)            |        [✔/✘]         |                               |
+| 16  | Protokoll     | `/logs`                             | GET         | Zeigt Änderungsprotokolle (nur Admin)             |        [✔/✘]         |                               |
 
 ---
 
 ## ✍️ Hinweise zur Durchführung
 
-* Tests werden mit **Postman** durchgeführt
-* Vor jedem Test **gültiges JWT** setzen:
+- Tests werden mit **Postman** durchgeführt
+- Vor jedem Test **gültiges JWT** setzen:
 
   ```
   Authorization: Bearer <token>
   ```
-* Für Datei-Uploads:
+
+- Für Datei-Uploads:
 
   ```
   Body → form-data → Key: "documents" → Type: File
